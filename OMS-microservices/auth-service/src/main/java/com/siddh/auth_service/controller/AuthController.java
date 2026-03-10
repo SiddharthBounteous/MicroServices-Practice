@@ -1,15 +1,13 @@
 package com.siddh.auth_service.controller;
 
+import com.siddh.auth_service.dto.LoginRequestDTO;
 import com.siddh.auth_service.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,10 +27,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String,String> login(@RequestParam String userName, @RequestParam String password){
-
-        UserDetails userDetails=userDetailsService.loadUserByUsername(userName);
-        if(passwordEncoder.matches(password,userDetails.getPassword())){
+    public Map<String,String> login(@RequestBody LoginRequestDTO requestDTO){
+        UserDetails userDetails=userDetailsService.loadUserByUsername(requestDTO.getUsername());
+        if(passwordEncoder.matches(requestDTO.getPassword(),userDetails.getPassword())){
             String token=jwtUtil.generateToken(userDetails);
             Map<String,String> response=new HashMap<>();
 
