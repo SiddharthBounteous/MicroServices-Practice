@@ -1,15 +1,45 @@
-package com.siddh.order_service.dto;
+package com.siddh.order_service.entity;
 
 import com.siddh.order_service.model.OrderStatus;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-public class OrderRequestDTO {
+@Entity
+@Table(name = "orders")
+public class OrderEntity {
+
+    //trade id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "account_id")
     private String accountId;
+
+    @Column
     private String symbol;
+    @Column
     private int quantity;
+    @Column
     private BigDecimal price;
+
+    @Column
     private String side;
+
+    @Column
+    private LocalDateTime timestamp;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private OrderStatus orderStatus;
+
+    public OrderEntity() {}
+
+    public Long getId() {
+        return id;
+    }
 
     public String getAccountId() {
         return accountId;
@@ -49,5 +79,21 @@ public class OrderRequestDTO {
 
     public void setSide(String side) {
         this.side = side;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

@@ -2,6 +2,7 @@ package com.siddh.order_service.model;
 
 import com.siddh.order_service.exception.InvalidOrderException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,19 +11,19 @@ public class Order {
     private String accountId;
     private String symbol;
     private int quantity;
-    private double price;
+    private BigDecimal price;
     private String side;
     private OrderStatus status;
     private LocalDateTime timestamp;
 
     public Order(){}
 
-    public Order(String accountId, String symbol, int quantity, double price, String side) {
+    public Order(String accountId, String symbol, int quantity, BigDecimal price, String side) {
 
         if(quantity<=0){
             throw new InvalidOrderException("Quantity must be greater than zero");
         }
-        if(price<=0){
+        if(price.compareTo(BigDecimal.ZERO)<=0){
             throw new InvalidOrderException("Price must be greater than zero");
         }
 
@@ -56,7 +57,7 @@ public class Order {
         return quantity;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 

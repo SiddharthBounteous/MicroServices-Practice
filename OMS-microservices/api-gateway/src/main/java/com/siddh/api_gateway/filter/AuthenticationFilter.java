@@ -11,6 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.net.http.HttpHeaders;
+import java.util.List;
 
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
@@ -25,16 +26,17 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path=request.getRequestURI();
 
-        if(path.contains("/api/auth/login")){
-            filterChain.doFilter(request,response);
+        if (path.contains("/api/auth/login") || path.contains("/api/auth/register")){
+            filterChain.doFilter(request, response);
             return;
         }
+
 
         String authHeader=request.getHeader("Authorization");
 
         if(authHeader==null || !authHeader.startsWith("Bearer ")){
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().write("Missing or Invalid Authorization Header"); // Give Postman a nice message!
+            response.getWriter().write("Missing or Invalid Authorization Header");
             return;
         }
 
@@ -42,10 +44,32 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
         try{
             jwtUtil.validateToken(token);
+
+            List<String> roles = jwtUtil.extractRoles(token);
+
+            if (roles == null || roles.isEmpty()){
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.getWriter().write("Access Denied: Your token does not contain any roles. Please log in again!");
+                return;
+            }
+            if(path.contains("/api/v1/orders") && roles.contains("ROLE_VIEWER")){
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.getWriter().write("Access Denied: Viewers are not allowed to place or view orders!");
+                return;
+            }
+
+            if(path.contains("/api/v1/analytics") && roles.contains("ROLE_TRADER")){
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.getWriter().write("Access Denied: Traders cannot view system analytics!");
+                return;
+            }
         }
         catch(Exception e){
+            System.out.println("JWT SECURITY ERROR: " + e.getMessage());
+            e.printStackTrace();
+
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().write("Token is Fake or Expired!"); // Give Postman a nice message!
+            response.getWriter().write("Token is Fake or Expired!");
             return;
         }
 

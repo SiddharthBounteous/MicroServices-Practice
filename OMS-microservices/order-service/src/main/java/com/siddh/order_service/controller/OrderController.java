@@ -2,6 +2,7 @@ package com.siddh.order_service.controller;
 
 import com.siddh.order_service.annotation.TrackExecutionTime;
 import com.siddh.order_service.dto.OrderRequestDTO;
+import com.siddh.order_service.dto.OrderResponseDTO;
 import com.siddh.order_service.model.Order;
 import com.siddh.order_service.repository.OrderRepository;
 import com.siddh.order_service.service.OrderService;
@@ -18,36 +19,28 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1")
 public class OrderController {
     private final OrderService orderService;
-    private final OrderRepository orderRepository;
 
-    public OrderController(OrderService orderService, OrderRepository orderRepository){
+    public OrderController(OrderService orderService){
         this.orderService = orderService;
-        this.orderRepository = orderRepository;
     }
 
     @PostMapping("/orders")
     @TrackExecutionTime
     public ResponseEntity<Map<String,String>> placeOrder(@RequestBody OrderRequestDTO incomingRequest){
-        Order newOrder=new Order(
-                incomingRequest.getAccountId(),
-                incomingRequest.getSymbol(),
-                incomingRequest.getQuantity(),
-                incomingRequest.getPrice(),
-                incomingRequest.getSide()
-        );
 
-        orderService.placeOrder(newOrder);
+
+        OrderResponseDTO orderResponseDTO=orderService.placeOrder(incomingRequest);
         Map<String,String>response=new LinkedHashMap<>();
         response.put("message","Order received and is processing in the background.");
-        response.put("orderId",newOrder.getOrderId());
-        response.put("status",newOrder.getStatus().name());
+        response.put("orderId",String.valueOf(orderResponseDTO.getId()));
+        response.put("status",orderResponseDTO.getStatus().name());
 
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/allOrders")
-    public ResponseEntity<List<Order>>getAllOrders() {
-        return ResponseEntity.ok(orderRepository.findAllOrdersList());
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
+        return ResponseEntity.ok(orderService.findAllOrders());
     }
 }
 
