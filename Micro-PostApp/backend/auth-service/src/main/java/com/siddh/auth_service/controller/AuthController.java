@@ -5,7 +5,9 @@ import com.siddh.auth_service.dto.RegisterRequestDTO;
 import com.siddh.auth_service.entity.UserEntity;
 import com.siddh.auth_service.repository.UserRepository;
 import com.siddh.auth_service.util.JWTUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,20 +19,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final JWTUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-
-    public AuthController(JWTUtil jwtUtil, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, UserRepository userRepository){
-        this.jwtUtil=jwtUtil;
-        this.userDetailsService=userDetailsService;
-        this.passwordEncoder=passwordEncoder;
-        this.userRepository = userRepository;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequestDTO registerRequestDTO){
@@ -40,12 +36,18 @@ public class AuthController {
 
         String requestedRole=registerRequestDTO.getRole().toUpperCase();
 
-        if(!requestedRole.startsWith("ROLE_")){
-            requestedRole="ROLE_" + requestedRole;
+        if(requestedRole==null || requestedRole.trim().isEmpty()){
+            requestedRole="ROLE_USER";
+        }
+        else{
+            requestedRole=requestedRole.toUpperCase();
+            if(!requestedRole.startsWith("ROLE_")){
+                requestedRole="ROLE_" + requestedRole;
+            }
         }
 
-        if(!requestedRole.equals("ROLE_ADMIN") && !requestedRole.equals("ROLE_TRADER") && !requestedRole.equals("ROLE_VIEWER")){
-            return ResponseEntity.badRequest().body("Error: Invalid role! Allowed roles are ADMIN, TRADER, VIEWER.");
+        if(!requestedRole.equals("ROLE_ADMIN") && !requestedRole.equals("ROLE_USER")){
+            return ResponseEntity.badRequest().body("Error: Invalid role! Allowed roles are ADMIN and USER");
         }
 
         UserEntity newUser=new UserEntity();
@@ -58,17 +60,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String,String> login(@RequestBody LoginRequestDTO requestDTO){
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO requestDTO){
         UserDetails userDetails=userDetailsService.loadUserByUsername(requestDTO.getUsername());
         if(passwordEncoder.matches(requestDTO.getPassword(),userDetails.getPassword())){
-            String token=jwtUtil.generateToken(userDetails);
+
+            UserEntity userEntity=userRepository.findByUsername(requestDTO.getUsername())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            String token=jwtUtil.generateToken(userDetails,userEntity.getId());
             Map<String,String> response=new HashMap<>();
 
-            response.put("token",token);
-            return response;
+            response.put("userId", String.valueOf(userEntity.getId()));
+            response.put("username", userEntity.getUsername());
+            return ResponseEntity.ok(response);
         }
         else{
-            throw new RuntimeException("Invalid Password!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Password!");
         }
     }
 

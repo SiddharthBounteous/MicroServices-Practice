@@ -25,7 +25,7 @@ public class JWTUtil {
         this.expirationMs = expirationMs;
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails, Long userId){
         Date now=new Date();
         Date expiry = new Date(now.getTime() + expirationMs);
 
@@ -35,6 +35,7 @@ public class JWTUtil {
 
         return Jwts.builder()
                 .claim("roles",roles)
+                .claim("userId",userId)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
@@ -42,7 +43,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public String extractUsername(String token){
         return parseClaims(token).getBody().getSubject();
     }
 

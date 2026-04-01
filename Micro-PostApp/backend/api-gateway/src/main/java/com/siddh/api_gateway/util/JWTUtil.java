@@ -24,6 +24,16 @@ public class JWTUtil {
                 .build()
                 .parseSignedClaims(token);
     }
+    public Long extractUserId(String token){
+        Claims claims=Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getBody();
+
+        Number userId=claims.get("userId", Number.class);
+        return userId!=null ? userId.longValue() : null;
+    }
 
     public List<String> extractRoles(String token) {
         //taking data
