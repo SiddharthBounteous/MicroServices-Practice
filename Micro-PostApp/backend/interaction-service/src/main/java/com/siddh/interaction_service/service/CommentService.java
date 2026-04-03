@@ -6,6 +6,8 @@ import com.siddh.interaction_service.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -23,5 +25,9 @@ public class CommentService {
                 .build();
 
         return commentRepository.save(newComment);
+    }
+
+    public List<Comment> getCommentsByPostId(Long postId) {
+        return commentRepository.findByPostIdOrderByCreatedAtDesc(postId);
     }
 }

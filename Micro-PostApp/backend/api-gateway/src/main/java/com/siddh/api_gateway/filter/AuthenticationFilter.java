@@ -27,7 +27,12 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path=request.getRequestURI();
 
-        if (path.contains("/api/auth/login") || path.contains("/api/auth/register")){
+        if (request.getMethod().equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if(path.contains("/api/v1/auth/login") || path.contains("/api/v1/auth/register")){
             filterChain.doFilter(request, response);
             return;
         }
@@ -64,14 +69,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             HeaderMapRequestWrapper wrappedRequest=new HeaderMapRequestWrapper(request);
             wrappedRequest.addHeader("X-User-Id", String.valueOf(userId));
             filterChain.doFilter(wrappedRequest, response);
+            return;
         }
         catch(Exception e){
             System.out.println("JWT SECURITY ERROR: " + e.getMessage());
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write("Token is Fake or Expired!");
+            return;
         }
-
-        filterChain.doFilter(request,response);
     }
 
     public static class HeaderMapRequestWrapper extends HttpServletRequestWrapper{

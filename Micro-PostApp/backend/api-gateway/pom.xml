@@ -42,9 +42,7 @@
         <!-- Source: https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-loadbalancer -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-loadbalancer</artifactId>
-            <version>4.3.0</version>
-            <scope>compile</scope>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

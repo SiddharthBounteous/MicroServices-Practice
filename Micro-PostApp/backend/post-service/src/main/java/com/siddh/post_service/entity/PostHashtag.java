@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "post_hashtags")
+//It maps which tags belong to which posts.
 public class PostHashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
