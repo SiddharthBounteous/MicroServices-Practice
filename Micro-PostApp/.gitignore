@@ -1,0 +1,23 @@
+# ===== ENV FILES =====
+.env
+
+# ===== SPRING BOOT =====
+**/target/
+**/*.log
+
+# Ignore local config files
+**/application.properties
+**/application-local.properties
+
+# ===== NODE / ANGULAR =====
+frontend/node_modules/
+frontend/dist/
+
+# ===== IDE FILES =====
+.vscode/
+.idea/
+*.iml
+
+# ===== OS FILES =====
+.DS_Store
+Thumbs.db

@@ -64,7 +64,7 @@ export class FeedComponent {
       next: () => {
         this.commentInputs[post.postId] = '';
 
-        // reload comments for that post
+        //reload comments for that post
         this.postService.getComments(post.postId).subscribe((comments) => {
           this.commentsMap[post.postId] = comments;
           this.posts = this.posts.map(p =>

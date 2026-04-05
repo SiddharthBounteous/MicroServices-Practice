@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VerifyPending } from './verify-pending';
+import { VerifyPendingComponent } from './verify-pending';
 
 describe('VerifyPending', () => {
-  let component: VerifyPending;
-  let fixture: ComponentFixture<VerifyPending>;
+  let component: VerifyPendingComponent;
+  let fixture: ComponentFixture<VerifyPendingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [VerifyPending],
+      declarations: [VerifyPendingComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VerifyPending);
+    fixture = TestBed.createComponent(VerifyPendingComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
