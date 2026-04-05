@@ -32,7 +32,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        if(path.contains("/api/v1/auth/login") || path.contains("/api/v1/auth/register")){
+        if(path.contains("/api/v1/auth/login") || path.contains("/api/v1/auth/register") || path.contains("/api/v1/auth/verify")){
             filterChain.doFilter(request, response);
             return;
         }

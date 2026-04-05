@@ -1,0 +1,45 @@
+<div class="auth-page">
+  <div class="auth-overlay">
+    <mat-card class="auth-card">
+      <div class="brand">MicroPost</div>
+      <h1>Create account</h1>
+      <p class="subtitle">Join MicroPost and start sharing your thoughts.</p>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="username" />
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="email" type="email" />
+        <mat-icon matSuffix>mail</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput [(ngModel)]="password" type="password" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <p *ngIf="message" class="success-text">{{ message }}</p>
+      <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="auth-btn"
+        type="button"
+        [disabled]="loading || !username.trim() || !email.trim() || !password.trim()"
+        (click)="submitRegister()">
+        {{ loading ? 'Creating account...' : 'Register' }}
+      </button>
+
+      <div class="auth-footer">
+        <span>Already have an account?</span>
+        <a routerLink="/login">Sign in</a>
+      </div>
+    </mat-card>
+  </div>
+</div>

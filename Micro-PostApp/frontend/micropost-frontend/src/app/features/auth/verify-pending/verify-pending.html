@@ -1,0 +1,21 @@
+<div class="auth-page">
+  <div class="auth-overlay">
+    <mat-card class="auth-card">
+      <div class="brand">MicroPost</div>
+      <h1>Check your email</h1>
+      <p class="subtitle">
+        We’ve sent a verification link
+        <span *ngIf="email">to <strong>{{ email }}</strong></span>.
+      </p>
+
+      <p class="success-text">
+        Please verify your email before logging in.
+      </p>
+
+      <div class="auth-footer">
+        <span>Already verified?</span>
+        <a routerLink="/login">Go to Login</a>
+      </div>
+    </mat-card>
+  </div>
+</div>

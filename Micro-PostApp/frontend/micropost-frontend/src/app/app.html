@@ -1,0 +1,27 @@
+<mat-toolbar class="topbar">
+  <div class="logo" routerLink="/feed">MicroPost</div>
+  <span class="spacer"></span>
+
+  <button mat-button class="nav-link" routerLink="/feed" *ngIf="authService.isLoggedIn()">
+    Feed
+  </button>
+
+  <button mat-button class="nav-link" routerLink="/login" *ngIf="!authService.isLoggedIn()">
+    Login
+  </button>
+
+  <button mat-button class="nav-link" routerLink="/register" *ngIf="!authService.isLoggedIn()">
+    Register
+  </button>
+
+  <button
+    mat-raised-button
+    color="accent"
+    class="logout-btn"
+    *ngIf="authService.isLoggedIn()"
+    (click)="logout()">
+    Logout
+  </button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

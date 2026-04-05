@@ -1,0 +1,22 @@
+<div class="auth-page">
+  <div class="auth-overlay">
+    <mat-card class="auth-card">
+      <div class="brand">MicroPost</div>
+      <h1>Email verification</h1>
+      <p class="subtitle">We’re confirming your account.</p>
+
+      <p [class.success-text]="success" [class.error-text]="!success">
+        {{ message }}
+      </p>
+
+      <button
+        *ngIf="success"
+        mat-raised-button
+        color="primary"
+        class="auth-btn"
+        routerLink="/login">
+        Go to Login
+      </button>
+    </mat-card>
+  </div>
+</div>

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class PostResponseDTO {
     private Long postId;
     private Long userId;
+    private String username;
     private String content;
     private LocalDateTime createdAt;
     private int likeCount;

@@ -1,0 +1,38 @@
+<div class="auth-page">
+  <div class="auth-overlay">
+    <mat-card class="auth-card">
+      <div class="brand">MicroPost</div>
+      <h1>Welcome back</h1>
+      <p class="subtitle">Sign in to continue sharing your thoughts.</p>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="username" />
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput [(ngModel)]="password" type="password" />
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="login-btn"
+        type="button"
+        [disabled]="loading || !username.trim() || !password.trim()"
+        (click)="submitLogin()">
+        {{ loading ? 'Signing in...' : 'Login' }}
+      </button>
+
+      <div class="auth-footer">
+        <span>Don't have an account?</span>
+        <a routerLink="/register">Create account</a>
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="feed-page">
+  <div class="feed-shell">
+
+    <mat-card class="composer-card">
+      <mat-card-content>
+        <div class="composer-header">
+          <div class="composer-avatar">
+            <mat-icon>edit</mat-icon>
+          </div>
+
+          <div>
+            <h2>Share something</h2>
+            <p>What's happening in your world today?</p>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>What's on your mind?</mat-label>
+          <textarea
+            matInput
+            name="newPostContent"
+            [(ngModel)]="newPostContent"
+            rows="4"
+            placeholder="Write something interesting...">
+          </textarea>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button
+          mat-raised-button
+          color="primary"
+          class="post-btn"
+          type="button"
+          (click)="submitPost()"
+          [disabled]="!newPostContent.trim()">
+          <mat-icon>send</mat-icon>
+          Post
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card *ngIf="posts.length === 0" class="empty-card">
+      <mat-card-content>
+        <div class="empty-state">
+          <mat-icon>forum</mat-icon>
+          <h3>No posts yet</h3>
+          <p>Be the first one to start the conversation.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngFor="let post of posts" class="post-card">
+      <mat-card-header>
+        <div mat-card-avatar class="user-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+
+        <div class="post-header-text">
+          <mat-card-title>{{ post.username }}</mat-card-title>
+          <mat-card-subtitle>{{ post.createdAt | date:'medium' }}</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="post-content">{{ post.content }}</p>
+      </mat-card-content>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-actions class="post-actions">
+        <button
+          mat-button
+          type="button"
+          class="action-btn like-btn"
+          (click)="toggleLike(post)"
+          [class.active]="post.hasLiked">
+          <mat-icon>{{ post.hasLiked ? 'favorite' : 'favorite_border' }}</mat-icon>
+          <span>{{ post.likeCount }} Likes</span>
+        </button>
+
+        <button
+          mat-button
+          type="button"
+          class="action-btn comment-toggle-btn"
+          (click)="toggleComments(post)">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <span>{{ post.commentCount }} Comments</span>
+        </button>
+      </mat-card-actions>
+
+      <div class="comment-section">
+        <mat-form-field appearance="outline" class="comment-input">
+          <mat-label>Add a comment</mat-label>
+          <input
+            matInput
+            [(ngModel)]="commentInputs[post.postId]"
+            placeholder="Write a comment...">
+        </mat-form-field>
+
+        <button
+          mat-flat-button
+          color="primary"
+          class="comment-btn"
+          type="button"
+          (click)="submitComment(post)"
+          [disabled]="!commentInputs[post.postId]?.trim()">
+          Comment
+        </button>
+      </div>
+
+      <div *ngIf="showComments[post.postId]" class="comments-box">
+        <div *ngIf="!commentsMap[post.postId]" class="loading-comments">
+          Loading comments...
+        </div>
+
+        <div *ngFor="let comment of commentsMap[post.postId]" class="comment-item">
+          <div class="comment-avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+
+          <div class="comment-body">
+            <div class="comment-meta">
+              <span class="comment-user">User {{ comment.username }}</span>
+              <span class="comment-date">{{ comment.createdAt | date:'short' }}</span>
+            </div>
+
+            <div class="comment-text">
+              {{ comment.content }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+  </div>
+</div>
