@@ -5,6 +5,9 @@
   <button mat-button class="nav-link" routerLink="/feed" *ngIf="authService.isLoggedIn()">
     Feed
   </button>
+  <button mat-button class="nav-link" routerLink="/profile" *ngIf="authService.isLoggedIn()">
+    Profile
+  </button>
 
   <button mat-button class="nav-link" routerLink="/login" *ngIf="!authService.isLoggedIn()">
     Login
@@ -13,6 +16,7 @@
   <button mat-button class="nav-link" routerLink="/register" *ngIf="!authService.isLoggedIn()">
     Register
   </button>
+  
 
   <button
     mat-raised-button

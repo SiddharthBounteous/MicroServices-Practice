@@ -1,5 +1,6 @@
 package com.siddh.auth_service.controller;
 
+import com.siddh.auth_service.dto.UserProfileDTO;
 import com.siddh.auth_service.dto.UserSummaryDTO;
 import com.siddh.auth_service.entity.UserEntity;
 import com.siddh.auth_service.repository.UserRepository;
@@ -21,5 +22,13 @@ public class UserController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return ResponseEntity.ok(new UserSummaryDTO(user.getId(), user.getUsername()));
+    }
+
+    @GetMapping("/{id}/profile")
+    public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable Long id){
+        UserEntity user=userRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("User not found"));
+
+        return ResponseEntity.ok(new UserProfileDTO(user.getId(),user.getUsername(),user.getEmail()));
     }
 }

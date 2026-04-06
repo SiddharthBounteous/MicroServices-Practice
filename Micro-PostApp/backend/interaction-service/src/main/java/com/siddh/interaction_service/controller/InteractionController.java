@@ -1,6 +1,7 @@
 package com.siddh.interaction_service.controller;
 
 import com.siddh.interaction_service.dto.CommentRequestDTO;
+import com.siddh.interaction_service.dto.CommentResponseDTO;
 import com.siddh.interaction_service.entity.Comment;
 import com.siddh.interaction_service.repository.CommentRepository;
 import com.siddh.interaction_service.repository.LikeRepository;
@@ -53,7 +54,7 @@ public class InteractionController {
     }
 
     @GetMapping("/{postId}/comments")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable Long postId) {
+    public ResponseEntity<List<CommentResponseDTO>> getComments(@PathVariable Long postId) {
         return ResponseEntity.ok(commentService.getCommentsByPostId(postId));
     }
 }

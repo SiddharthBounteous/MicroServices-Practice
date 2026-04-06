@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Post } from '../model/post';
+import { Comment } from '../model/comment';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,6 @@ export class PostService {
   }
 
   getComments(postId: number) {
-    return this.http.get<any[]>(`${this.interactionUrl}/${postId}/comments`);
+    return this.http.get<Comment[]>(`${this.interactionUrl}/${postId}/comments`);
   }
 }

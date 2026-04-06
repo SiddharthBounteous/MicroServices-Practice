@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { PostService } from '../../core/services/post';
 import { Post } from '../../core/model/post';
+import { Comment } from '../../core/model/comment';
 
 @Component({
   selector: 'app-feed',
@@ -13,7 +14,7 @@ export class FeedComponent {
   newPostContent = '';
   commentInputs: { [postId: number]: string } = {};
   showComments: { [postId: number]: boolean } = {};
-  commentsMap: { [postId: number]: any[] } = {};
+  commentsMap: { [postId: number]: Comment[] } = {};
 
   constructor(
     private postService: PostService,

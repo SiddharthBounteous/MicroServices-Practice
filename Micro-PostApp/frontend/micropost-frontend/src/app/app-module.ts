@@ -19,6 +19,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { RegisterComponent } from './features/auth/register/register';
 import { VerifyEmailComponent } from './features/auth/verify-email/verify-email';
 import { VerifyPendingComponent } from './features/auth/verify-pending/verify-pending';
+import { ProfileComponent } from './features/profile/profile';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { VerifyPendingComponent } from './features/auth/verify-pending/verify-pe
     RegisterComponent,
     VerifyEmailComponent,
     VerifyPendingComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
