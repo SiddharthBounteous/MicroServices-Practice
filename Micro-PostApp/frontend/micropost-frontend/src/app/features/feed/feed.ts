@@ -12,6 +12,7 @@ import { Comment } from '../../core/model/comment';
 export class FeedComponent {
   posts: Post[] = [];
   newPostContent = '';
+  postError = '';
   commentInputs: { [postId: number]: string } = {};
   showComments: { [postId: number]: boolean } = {};
   commentsMap: { [postId: number]: Comment[] } = {};
@@ -39,12 +40,26 @@ export class FeedComponent {
     const content = this.newPostContent.trim();
     if (!content) return;
 
+    if (content.length > 140) {
+      this.postError = 'Post cannot exceed 140 characters';
+      return;
+    }
+
     this.postService.createPost(content).subscribe({
       next: () => {
         this.newPostContent = '';
         this.loadFeed();
       },
-      error: (err) => console.error('Failed to create post', err)
+      error: (err) => {
+        console.error('Failed to create post', err);
+
+        if(err.error){
+          this.postError=err.error;
+        }
+        else{
+          this.postError='Something went wrong';
+        }
+      }
     });
   }
 
