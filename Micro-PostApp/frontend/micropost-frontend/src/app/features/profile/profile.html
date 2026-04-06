@@ -1,0 +1,17 @@
+<div class="profile-page">
+  <p *ngIf="loading">Loading profile...</p>
+
+  <p *ngIf="error && !loading" class="error">
+    {{ error }}
+  </p>
+
+  <div *ngIf="profile && !loading" class="profile-card">
+    <div class="avatar">
+      {{ profile.username.charAt(0).toUpperCase() }}
+    </div>
+
+    <h2>{{ profile.username }}</h2>
+    <p>{{ profile.email }}</p>
+    <p>User ID: {{ profile.id }}</p>
+  </div>
+</div>
